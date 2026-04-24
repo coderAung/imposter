@@ -16,7 +16,7 @@ const variants = {
 export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(({className, variant = "primary", children, asChild = false, ...props}, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
-        <Comp ref={ref} {...props} className={ `rounded p-1 font-semibold cursor-pointer tracking-wider ${variants[variant]} ${className}`}>{children}</Comp>
+        <Comp ref={ref} {...props} className={`text-center rounded p-1 font-semibold cursor-pointer tracking-wider ${variants[variant]} ${className}`}>{children}</Comp>
     )
 })
 

@@ -1,10 +1,18 @@
+"use client"
 import { AppButton } from "@/components/customs/buttons";
 import { Title } from "@/components/customs/fonts";
 import { Copy, Plus, UserPlus } from "lucide-react";
 import { GameForm, LeaveButton, ProfileCard } from "../../_parts/lobbies";
 import { AppCard } from "@/components/customs/cards";
+import { useCurrentLobby } from "@/utils/hooks";
+import { use, useEffect } from "react";
 
-export default function Lobby() {
+export default function Lobby({params}: {params:Promise<{id:string}>}) {
+    const setCurrentLobby = useCurrentLobby(state => state.setCurrentLobby)
+    const {id} = use(params)
+    useEffect(() => {
+        setCurrentLobby(("389350"))
+    }, [id, setCurrentLobby])
     return (
         <>
             <div className="flex justify-between px-2">
@@ -19,11 +27,11 @@ export default function Lobby() {
                 </div>
             </div>
 
-            <GameForm className="px-2 mt-5" />
+            <GameForm className="hidden md:block px-2 mt-5" />
 
             <div className="grid grid-cols-3 gap-5 mt-5">
                 {[1, 2, 3, 4, 5].map(i => <ProfileCard key={i} />)}
-                <AppButton variant="ghost" asChild>
+                <AppButton variant="ghost" className="hidden md:flex" asChild>
                     <AppCard className="flex flex-col items-center rounded-2xl justify-center" variant="purple">
                         <Plus />
                         <span className="mt-3">Invite Player</span>

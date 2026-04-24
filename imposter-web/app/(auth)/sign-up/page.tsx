@@ -11,10 +11,10 @@ export default function SignUp() {
             <AppInput id="password" name="password" label="Password" type="password" placeholder="password" className="mb-3" />
             <AppInput id="confirm" name="confirm" label="Confirm Password" type="password" placeholder="password" />
             <div className="mt-4">
-                <AppButton className="w-full" asChild><Link href={"/home"}>Sign Up to Game</Link></AppButton>
+                <AppButton className="w-full block" asChild><Link href={"/home"}>Sign Up to Game</Link></AppButton>
                 <div className="text-center my-2 font-bold">or</div>
                 <AppButton className="w-full" variant="outline">Login with Google</AppButton>
-                <AppButton className="w-full mt-2" variant="ghost" asChild><Link href={"/sign-in"}>Sign In To Game</Link></AppButton>
+                <AppButton className="w-full block mt-2 text-center" variant="ghost" asChild><Link href={"/sign-in"}>Sign In To Game</Link></AppButton>
             </div>
         </div>
     )
