@@ -1,7 +1,9 @@
+import { Slot } from "@radix-ui/react-slot";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 
 type AppButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?:"primary" | "outline" | "ghost" | "secondary"
+    asChild?:boolean,
+    variant?:"primary" | "outline" | "ghost" | "secondary",
 }
 
 const variants = {
@@ -11,9 +13,10 @@ const variants = {
     ghost: "",
 }
 
-export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(({className, variant = "primary", children, ...props}, ref) => {
+export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(({className, variant = "primary", children, asChild = false, ...props}, ref) => {
+    const Comp = asChild ? Slot : "button"
     return (
-        <button ref={ref} {...props} className={ `rounded p-2 font-semibold cursor-pointer ${variants[variant]} ${className}`}>{children}</button>
+        <Comp ref={ref} {...props} className={ `rounded p-1 font-semibold cursor-pointer tracking-wider ${variants[variant]} ${className}`}>{children}</Comp>
     )
 })
 

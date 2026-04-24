@@ -1,11 +1,24 @@
 import { AppButton } from "@/components/customs/buttons";
-import { Gamepad2, Home, Settings, UserRound, UsersRoundIcon } from "lucide-react";
+import { Header } from "@/components/customs/fonts";
+import { Slot } from "@radix-ui/react-slot";
+import { Gamepad2, Home, Menu, Search, Settings, UserRound, UsersRoundIcon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 export default function DashboardLayout({children}: {children:React.ReactNode}) {
     return (
         <>
-            <div className="pb-20">
+            <div className="md:w-1/2 md:mx-auto md:mt-2 md:rounded py-3 px-3 items-center flex justify-between mb-4 sticky top-0 backdrop-blur-3xl">
+                <Header header="Imposter"/>
+                <div className="flex gap-x-4">
+                    <Search />
+                    <div className="hidden md:flex">
+                        <Menu />
+                    </div>
+                </div>
+            </div>
+
+            <div className="pb-20 md:w-1/2 md:mx-auto md:p-0">
                 {children}
             </div>
             <StickyMenu />
@@ -18,7 +31,7 @@ const StickyMenu = () => {
         <div className="fixed bottom-2 w-full px-3 md:hidden">
             <div className="rounded-2xl bg-blue-300/20 backdrop-blur-lg px-2 py-5">
                 <div className="grid grid-cols-5 gap-y-2">
-                    <StickyMenuItem><Home /></StickyMenuItem>
+                    <StickyMenuItem asChild><Link href={"/home"}><Home /></Link></StickyMenuItem>
                     <StickyMenuItem><UsersRoundIcon /></StickyMenuItem>
 
                     <StickyMenuItem className="">
@@ -33,7 +46,8 @@ const StickyMenu = () => {
     )
 }
 
-const StickyMenuItem = ({children, className}: {children:React.ReactNode, className?:string}) => {
-    return <div className={`flex justify-center items-center ${className}`}>{children}</div>
+const StickyMenuItem = ({children, className, asChild = false}: {children:React.ReactNode, className?:string, asChild?:boolean}) => {
+    const Comp = asChild ? Slot : "div";
+    return <Comp className={`flex justify-center items-center ${className}`}>{children}</Comp>
 
 }

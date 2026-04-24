@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export const ProfileStatics = ({className}:{className?:string}) => {
     return (
-        <div className={` ${className}`}>
+        <div className={`px-3 ${className}`}>
         
             <div className={`flex gap-x-8 items-center`}>
                 <div>
