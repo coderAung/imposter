@@ -36,7 +36,7 @@ export const LobbyCard = ({id}: {id:number}) => {
                     <AppBadge variant="green">Player - 7</AppBadge>
                 </div>
             </div>
-            <div>
+            <div className="flex items-start">
                 <AppButton variant="ghost" className="rounded-full text-red-500"><Trash2 size={"1.2rem"}/></AppButton>
                 <AppButton variant="ghost" className="rounded-full"><Edit size={"1.2rem"}/></AppButton>
                 <AppButton variant="ghost" className="rounded-full">

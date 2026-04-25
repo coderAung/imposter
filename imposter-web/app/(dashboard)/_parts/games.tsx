@@ -3,11 +3,11 @@ import { AppBadge } from "@/components/customs/badges"
 import { AppButton } from "@/components/customs/buttons"
 import { AppCard } from "@/components/customs/cards"
 import { Plus } from "lucide-react"
+import Link from "next/link"
 import { useState } from "react"
 
 export const CurrentGame = ({className}: {className?:string}) => {
-    const [game, setGame] = useState<boolean>(true)
-    const toggle = () => setGame(!game)
+    const [game] = useState<boolean>(true)
 
     return (
         <>
@@ -22,7 +22,7 @@ export const CurrentGame = ({className}: {className?:string}) => {
                     </div>
                 </div>
                 <div className="self-center">
-                    <AppButton onClick={toggle} variant="secondary" className="rounded-full"><Plus/></AppButton>
+                    <AppButton variant="secondary" className="rounded-full"><Link href={"/game/2587"}><Plus/></Link></AppButton>
                 </div>
             </div>
         </AppCard> : <div></div>
