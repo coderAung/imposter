@@ -1,7 +1,7 @@
 "use client"
 import { Header } from "@/components/customs/fonts";
 import { Slot } from "@radix-ui/react-slot";
-import { Gamepad2, Home, Menu, Search, Settings, UserRound, UsersRoundIcon } from "lucide-react";
+import { Bell, Gamepad2, Home, Menu, Search, Settings, UserRound, UsersRoundIcon } from "lucide-react";
 import Link from "next/link";
 import { GameFormModal } from "./_parts/lobbies";
 import { useState } from "react";
@@ -15,8 +15,9 @@ export default function DashboardLayout({children}: {children:React.ReactNode}) 
         <>
             <div className="md:w-1/2 backdrop-blur-xl px-2 py-2 md:mx-auto md:mt-2 md:rounded items-center flex justify-between mb-4 sticky top-0">
                 <Header header="Imposter"/>
-                <div className="flex gap-x-4">
+                <div className="flex gap-x-4 px-3">
                     <Search />
+                    <Bell />
                     <div className="hidden md:flex">
                         <Menu />
                     </div>

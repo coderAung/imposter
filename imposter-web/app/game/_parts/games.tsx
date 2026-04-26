@@ -1,7 +1,7 @@
 "use client"
 import { AppCard } from "@/components/customs/cards"
 import { Title } from "@/components/customs/fonts"
-import { Mic, Send } from "lucide-react"
+import { Mic, MicOff, Users2, Volume2, VolumeOff } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 
@@ -31,25 +31,39 @@ export const GameTimer = ({className}:{className?:string}) => {
     )
 }
 
-export const GameCard = () => {
+export const GameCard = ({className}:{className?:string}) => {
     return (
-        <AppCard variant="blue" className="h-[80%] w-full rounded-2xl">
+        <AppCard variant="blue" className={`w-full rounded-2xl ${className}`}>
             secret
         </AppCard>
     )
 }
 
-export const GameArea = ({children}: {children:React.ReactNode}) => {
-    const players = [1, 2, 3, 4, 5, 6]
-    const total = players.length
-    const radius = 180
+export const GamePlayers = ({className}:{className?:string}) => {
     return (
-        <div className={`flex justify-center items-center w-80 h-80 relative rounded-full`}>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/5 h-[90%] flex items-center justify-center">
-                {children}
+        <div className={` ${className}`}>
+            <Title title="Players chat" className="text-center mb-3" />
+            <div className={`p-2 flex flex-wrap justify-center gap-3`}>
+                {[1, 2, 3, 4, 5].map(i => <ChatProfile key={i} />)}
             </div>
-            {players.map((v, i) => <GamePlayer key={i} angle={(360/total) * i + 270} radius={radius} />)}
         </div>
+    )
+}
+
+export const GameArea = ({children, className}: {children:React.ReactNode, className?:string}) => {
+    // const players = [1, 2, 3, 4, 5, 6]
+    // const total = players.length
+    // const radius = 180
+    return (
+        <div className={`${className}`}>
+            {children}
+        </div>
+        // <div className={`flex justify-center items-center w-80 h-80 relative rounded-full`}>
+        //     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/5 h-[90%] flex items-center justify-center">
+        //         {children}
+        //     </div>
+            // {players.map((v, i) => <GamePlayer key={i} angle={(360/total) * i + 270} radius={radius} />)}
+        // </div>
     )
 }
 
@@ -73,21 +87,58 @@ export const GameChat = ({className}:{className?:string}) => {
         <div className={`${className}`}>
             <div className="p-3 relative rounded-2xl border border-gray-500/40 bg-gray-500/20">
                 <div className="min-h-5/6 max-h-5/6">
-                    <Title title="Chat" className="sticky top-0"/>
-                    <div>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22, 23, 44, 65, 77, 47, 99, 402, 345, 45, 89, 87, 86, 75].map(i => <div key={i}>{i}</div>)}
+                    <Title title="Chat" className="mb-3"/>
+                    <div className="flex flex-wrap justify-center gap-3 mb-3">
+                        {[1, 2, 3, 4, 5].map(i => <ChatProfile key={i} className="" />)}
                     </div>
-                </div>
-                <div className="absolute bottom-0 right-0 p-3 w-full">
-                    <div className="border border-blue-400 p-5 rounded-2xl w-full">
-                        <input placeholder="Hint" className="p-2 ring-0 outline-0 w-full"/>
-                        <div className="flex gap-x-3 mt-3 justify-end px-5">
-                            <button><Mic size={"1.2rem"} /></button>
-                            <button><Send size={"1.2rem"} /></button>
-                        </div>
+                    <div className="flex justify-center items-center">
+                        <ChatControls />
                     </div>
                 </div>
             </div>
+        </div>
+    )
+}
+
+const ChatPlayersControls = ({className}:{className?:string}) => {
+    return (
+        <div className={`rounded-full px-2 gap-x-3 py-2 backdrop-blur-md flex justify-center items-center border border-blue-400/50 bg-blue-400/30 ${className}`}>
+            <button className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-ful"><Users2 /></button>
+        </div>
+    )
+}
+
+export const ChatControls = ({className}:{className?:string}) => {
+    const [silent, setSilent] = useState(false)
+    const toggleSilent = () => setSilent(!silent)
+    const [mute, setMute] = useState(false)
+    const toggleMute = () => setMute(!mute)
+    return (
+        <div className={`rounded-full px-5 gap-x-3 py-2 flex justify-center items-center border border-blue-400/50 bg-blue-400/30 backdrop-blur-md ${className}`}>
+            {!silent && <button onClick={toggleSilent} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"><Volume2 /></button>}
+            {silent && <button onClick={toggleSilent} className="hover:bg-gray-400/30 p-2 cursor-pointer rounded-full"><VolumeOff /></button>}
+            {!mute && <button onClick={toggleMute} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"> <Mic /></button>}
+            {mute && <button onClick={toggleMute} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"> <MicOff /></button>}
+        </div>
+    )
+}
+
+export const GameChatMobile = ({className}: {className?:string}) => {
+    return (
+        <div className={`gap-x-3 py-10 flex justify-center w-full ${className}`}>
+            <ChatControls />
+            <ChatPlayersControls />
+        </div>
+    )
+}
+
+export const ChatProfile = ({className}:{className?:string}) => {
+    const green = "border-2 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.6),inset_0_0_15px_rgba(34,211,238,0.4)]"
+
+    return (
+        <div className={`flex justify-center flex-col items-center ${className}`}>
+            <Image src={"/default.avif"} alt="Profile photo" width={150} height={150} className={`rounded mb-2 ${green}`} />
+            <div className="text-center">Name</div>
         </div>
     )
 }
