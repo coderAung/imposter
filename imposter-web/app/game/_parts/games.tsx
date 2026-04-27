@@ -1,4 +1,5 @@
 "use client"
+import { ChatControls } from "@/app/_parts/chats"
 import { AppCard } from "@/components/customs/cards"
 import { Title } from "@/components/customs/fonts"
 import { Mic, MicOff, Users2, Volume2, VolumeOff } from "lucide-react"
@@ -108,20 +109,6 @@ const ChatPlayersControls = ({className}:{className?:string}) => {
     )
 }
 
-export const ChatControls = ({className}:{className?:string}) => {
-    const [silent, setSilent] = useState(false)
-    const toggleSilent = () => setSilent(!silent)
-    const [mute, setMute] = useState(false)
-    const toggleMute = () => setMute(!mute)
-    return (
-        <div className={`rounded-full px-5 gap-x-3 py-2 flex justify-center items-center border border-blue-400/50 bg-blue-400/30 backdrop-blur-md ${className}`}>
-            {!silent && <button onClick={toggleSilent} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"><Volume2 /></button>}
-            {silent && <button onClick={toggleSilent} className="hover:bg-gray-400/30 p-2 cursor-pointer rounded-full"><VolumeOff /></button>}
-            {!mute && <button onClick={toggleMute} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"> <Mic /></button>}
-            {mute && <button onClick={toggleMute} className="hover:bg-gray-400/30 cursor-pointer p-2 rounded-full"> <MicOff /></button>}
-        </div>
-    )
-}
 
 export const GameChatMobile = ({className}: {className?:string}) => {
     return (
