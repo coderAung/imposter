@@ -6,6 +6,8 @@ from app import engine, apis
 from fastapi import FastAPI
 import uvicorn
 
+from app.apis import controllers
+
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     print("""
@@ -26,8 +28,9 @@ async def lifespan(app:FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(apis.controller)
+app.include_router(controllers.controller)
 
+controllers.exception_handers(app)
 
 if __name__ == "__main__":
     uvicorn.run(app=app)

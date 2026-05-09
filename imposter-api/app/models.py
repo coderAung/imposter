@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -19,13 +19,12 @@ class AdminAccount(SQLModel, table=True):
 
 
 class Account(SQLModel, table=True):
-    account_id:Optional[UUID] = Field(primary_key=True, default=None)
+    account_id:Optional[UUID] = Field(primary_key=True, default_factory=uuid4)
     name:str = Field(nullable=False)
     email:str = Field(unique=True)
     username:str = Field(nullable=False, unique=True)
     profile_photo:str = Field(nullable=True)
     created_at:datetime = Field()
-    followers:list["Follower"] = Relationship(back_populates="follower")
     lobbies:list["Lobby"] = Relationship(back_populates="players", link_model=PlayerLobbyLink)
 
     class AccountType(Enum):
@@ -33,7 +32,7 @@ class Account(SQLModel, table=True):
         T = "Telegram"
         E = "Email"
 
-    account_type:AccountType = Field()
+    account_type:AccountType = Field(nullable=False)
 
 
 class AccountPassword(SQLModel, table=True):
@@ -44,20 +43,16 @@ class AccountPassword(SQLModel, table=True):
 class Follower(SQLModel, table=True):
     account_id:UUID = Field(primary_key=True, foreign_key="account.account_id")
     follower_id:UUID = Field(primary_key=True, foreign_key="account.account_id")
-    follower:Account = Relationship(
-        back_populates="followers",
-        sa_relationship_args={"foreign_keys": "Follower.follower_id"})
-
-    followed_at:datetime
+    followed_at:datetime = Field()
 
 class Category(SQLModel, table=True):
-    category_id:Optional[int]
-    title:str
-    context:str
-    created_by:UUID = Field(foreign_key="admin_account.admin_id")
+    category_id:Optional[int] = Field(primary_key=True)
+    title:str = Field(nullable=False)
+    context:str = Field(nullable=False)
+    created_by:UUID = Field(foreign_key="adminaccount.admin_id")
 
 class Lobby(SQLModel, table=True):
-    lobby_id:UUID = Field(primary_key=True, default=None)
+    lobby_id:UUID = Field(primary_key=True, default_factory=uuid4)
     players:list[Account] = Relationship(back_populates="lobbies", link_model=PlayerLobbyLink)
     created_by:UUID = Field(foreign_key="account.account_id")
     is_playing:bool = Field(nullable=False)
@@ -65,7 +60,7 @@ class Lobby(SQLModel, table=True):
     created_at:datetime = Field()
 
 class Game(SQLModel, table=True):
-    game_id:UUID = Field(primary_key=True, default=None)
+    game_id:UUID = Field(primary_key=True, default_factory=uuid4)
     lobby_id:UUID = Field(nullable=False, foreign_key="lobby.lobby_id")
     imposter_id:UUID = Field(nullable=False)
     is_ended:bool = Field(nullable=Field)

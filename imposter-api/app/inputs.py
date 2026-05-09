@@ -9,6 +9,7 @@ class SignInForm:
 
 @dataclass
 class SignUpForm:
+    name:str
     email:str
     password:str
     confirm:str
