@@ -31,3 +31,7 @@ class LobbyJoinForm:
     lobby_id:UUID
     otp_token:str
     joined_by:str
+
+@dataclass
+class LobbyForm:
+    name:str

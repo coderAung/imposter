@@ -68,3 +68,7 @@ class GameResult:
 class CategoryListItem:
     category_id:int
     name:str
+
+@dataclass
+class ModificationResult[ID]:
+    result_id:ID
