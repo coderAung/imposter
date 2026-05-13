@@ -22,11 +22,15 @@ api = APIRouter(prefix="/lobbies")
 def items(service:Annotated[LobbyService, Depends(get_lobby_service)]):
     return service.items()
 
-
-@api.get("/{id}", response_model=LobbyDetail)
+@api.put("/{lobby_id}", response_model=ModificationResult[UUID])
 @security.login(permit_roles=["player"])
-def detail(id:UUID, service:Annotated[LobbyService, Depends(get_lobby_service)]):
-    return service.detail(id)
+def update(form:LobbyForm, lobby_id:UUID, request:Request, service:Annotated[LobbyService, Depends(get_lobby_service)]):
+    return service.update(form, lobby_id, cast(LoginUser, request.user).userid)
+
+@api.get("/{lobby_id}", response_model=LobbyDetail)
+@security.login(permit_roles=["player"])
+def detail(lobby_id:UUID, service:Annotated[LobbyService, Depends(get_lobby_service)]):
+    return service.detail(lobby_id)
 
 @api.post("/", response_model=ModificationResult[UUID])
 @security.login(permit_roles=["player"])
