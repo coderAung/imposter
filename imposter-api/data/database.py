@@ -1,9 +1,13 @@
 from sqlmodel import SQLModel, Session, create_engine
 
-from app.exceptions import AppBusinessException
-import app.models
+from utilities.exceptions import AppBusinessException
+import data.models
 
 engine = create_engine(url="sqlite:///app.db", echo=True)
+
+def get_session():
+    with Session(bind=engine) as session:
+        yield session
 
 def safecall[T](t:T | None, model:str, key:str, value:str) -> T:
     if t is None:

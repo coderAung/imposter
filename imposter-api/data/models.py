@@ -33,12 +33,17 @@ class Account(SQLModel, table=True):
         E = "Email"
 
     account_type:AccountType = Field(nullable=False)
+    account_password:Optional["AccountPassword"] = Relationship(back_populates="account")
 
+    @property
+    def password(self) -> str:
+        return self.account_password.password if self.account_password is not None else None
 
 class AccountPassword(SQLModel, table=True):
     account_id:UUID = Field(primary_key=True, foreign_key="account.account_id")
     password:str = Field(nullable=False)
     updated_at:datetime
+    account:Account = Relationship(back_populates="account_password")
 
 class Follower(SQLModel, table=True):
     account_id:UUID = Field(primary_key=True, foreign_key="account.account_id")
@@ -53,6 +58,7 @@ class Category(SQLModel, table=True):
 
 class Lobby(SQLModel, table=True):
     lobby_id:UUID = Field(primary_key=True, default_factory=uuid4)
+    name:str = Field(nullable=False)
     players:list[Account] = Relationship(back_populates="lobbies", link_model=PlayerLobbyLink)
     created_by:UUID = Field(foreign_key="account.account_id")
     is_playing:bool = Field(nullable=False)

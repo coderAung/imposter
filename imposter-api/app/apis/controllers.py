@@ -3,10 +3,11 @@ from http import HTTPStatus
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.exceptions import AppBusinessException
+from utilities.exceptions import AppBusinessException
 
 import app.apis.auths.controller as auths_controller
 import app.apis.lobbies.controller as lobbies_controller
+from utilities.security import SecurityException
 
 controller = APIRouter()
 
@@ -18,5 +19,12 @@ def exception_handers(app:FastAPI):
     async def app_business_exception_handler(request:Request, exc:AppBusinessException):
         return JSONResponse(
             status_code=HTTPStatus.BAD_REQUEST,
+            content={"message": exc.message}
+        )
+    
+    @app.exception_handler(SecurityException)
+    async def security_exception(request:Request, exc:SecurityException):
+        return JSONResponse(
+            status_code=HTTPStatus.FORBIDDEN,
             content={"message": exc.message}
         )

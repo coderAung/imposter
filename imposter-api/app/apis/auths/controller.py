@@ -1,11 +1,17 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+from sqlmodel import Session
 
 from app.apis.auths.services import SignInService, SignUpService
-from app.dependencies import get_sign_in_service, get_sign_up_service
 from app.inputs import SignInForm, SignUpForm
+from data.database import get_session
 
+def get_sign_in_service(session:Annotated[Session, Depends(get_session)]) -> SignInService:
+    return SignInService(session)
+
+def get_sign_up_service(session:Annotated[Session, Depends(get_session)]) -> SignUpService:
+    return SignUpService(session)
 
 api = APIRouter(prefix="/auth")
 

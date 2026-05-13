@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 
 from sqlmodel import SQLModel
 
-from app import engine, apis
 from fastapi import FastAPI
 import uvicorn
+from data.database import engine
 
 from app.apis import controllers
 
