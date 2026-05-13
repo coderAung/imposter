@@ -11,6 +11,7 @@ class SecurityException(Exception):
 
 @dataclass(frozen=True)
 class LoginUser:
+    userid:str
     username:str
     password:str
     role:str
