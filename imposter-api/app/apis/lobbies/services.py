@@ -38,6 +38,8 @@ class LobbyService(BaseService):
             account = safecall(self.session.get(Account, UUID(userid)), "Account", "account_id", userid)
             lobby = Lobby(name=form.name, limit=LOBBY_LIMIT, created_at=datetime.now(), created_by=account.account_id)
             save_and_refresh(self.session, lobby)
+            lobby.players = [account]
+            save_and_refresh(self.session, lobby)
         return ModificationResult[UUID](lobby.lobby_id)
     
     def add_player(self, lobby_id:UUID, player_id:UUID):
