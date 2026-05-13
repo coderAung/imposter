@@ -51,7 +51,7 @@ class LobbyService(BaseService):
             lobby.players.append(account)
             save_and_refresh(self.session, lobby)
 
-    def remove_players(self, lobby_id:UUID, player_id:UUID):
+    def remove_player(self, lobby_id:UUID, player_id:UUID):
         with self.session.begin():
             lobby = safecall(self.session.get(Lobby, lobby_id), "Lobby", "lobby_id", lobby_id)
             account = safecall(self.session.get(Account, player_id), "Account", "player_id", player_id)
