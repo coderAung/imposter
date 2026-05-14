@@ -9,7 +9,7 @@ import app.apis.auths.controller as auths_controller
 import app.apis.lobbies.controller as lobbies_controller
 from utilities.security import SecurityException
 
-controller = APIRouter()
+controller = APIRouter(prefix="/api/v1")
 
 controller.include_router(router=auths_controller.api)
 controller.include_router(router=lobbies_controller.api)
