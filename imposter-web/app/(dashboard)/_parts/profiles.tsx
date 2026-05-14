@@ -1,8 +1,9 @@
 import { AppBadge } from "@/components/customs/badges"
+import { Profile } from "@/models/dtos"
 import Image from "next/image"
 
 
-export const ProfileStatics = ({className}:{className?:string}) => {
+export const ProfileStatics = ({profile, className}:{profile:Profile, className?:string}) => {
     return (
         <div className={`px-3 ${className}`}>
         
@@ -12,17 +13,16 @@ export const ProfileStatics = ({className}:{className?:string}) => {
                 </div>
 
                 <div className="flex flex-col gap-y-2">
-                    <span className="font-semibold tracking-widest">Ye Wont Aung</span>
-                    <span className="font-semibold text-sm tracking-widest text-slate-400">@yewontaung</span>
-                    <span className="font-semibold text-sm tracking-widest text-slate-400">name@email.com</span>
+                    <span className="font-semibold tracking-widest">{profile.name}</span>
+                    <span className="font-semibold text-sm tracking-widest text-slate-400">@{profile.username}</span>
+                    <span className="font-semibold text-sm tracking-widest text-slate-400">{profile.email}</span>
                 </div>
             </div>
 
             <div className="flex flex-wrap gap-2 mt-5">
-                <AppBadge>Lobbies - 10</AppBadge>
-                <AppBadge variant="green">Games - 13</AppBadge>
-                <AppBadge variant="purple">Followers - 10</AppBadge>
-                <AppBadge variant="yellow">Followings - 10</AppBadge>
+                <AppBadge>Lobbies - {profile.lobbies}</AppBadge>
+                <AppBadge variant="purple">Followers - {profile.followers}</AppBadge>
+                <AppBadge variant="green">Followings - {profile.followings}</AppBadge>
             </div>
 
         </div>

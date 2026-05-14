@@ -3,13 +3,14 @@ import { AppBadge } from "@/components/customs/badges"
 import { AppButton } from "@/components/customs/buttons"
 import { AppCard } from "@/components/customs/cards"
 import { Title } from "@/components/customs/fonts"
+import { LobbyListItem } from "@/models/dtos"
 import { useCurrentLobby } from "@/utils/hooks"
 import { ArrowRight, Edit, Minus, Plus, SquareArrowRightExit, Trash2, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export const LobbyList = () => {
+export const LobbyList = ({lobbies}: {lobbies:LobbyListItem[]}) => {
     const setCurrentLobby = useCurrentLobby(state => state.setCurrentLobby)
     useEffect(() => {
         setCurrentLobby(null)
@@ -21,26 +22,26 @@ export const LobbyList = () => {
                 <AppButton variant="ghost" className="flex items-center bg-blue-500/20 text-blue-500"><Plus size={"1.2rem"}/> New Lobby</AppButton>
             </div>
             <div className="flex flex-col gap-y-3 py-2">
-                {[1, 2, 3, 4, 5].map(i => <LobbyCard key={i} id={i} />)}
+                {lobbies.map(i => <LobbyCard key={i.lobby_id} lobby_id={i.lobby_id} name={i.name} players={i.players} />)}
             </div>
         </div>
     )
 }
 
-export const LobbyCard = ({id}: {id:number}) => {
+export const LobbyCard = ({lobby_id, name, players}: LobbyListItem) => {
     return (
         <AppCard variant="blue" className="rounded-2xl flex justify-between">
             <div>
-                <span>WeAreAPI</span>
+                <span>{name}</span>
                 <div className="mt-3">
-                    <AppBadge variant="green">Player - 7</AppBadge>
+                    <AppBadge variant="green">Player - {players}</AppBadge>
                 </div>
             </div>
             <div className="flex items-start">
                 <AppButton variant="ghost" className="rounded-full text-red-500"><Trash2 size={"1.2rem"}/></AppButton>
                 <AppButton variant="ghost" className="rounded-full"><Edit size={"1.2rem"}/></AppButton>
                 <AppButton variant="ghost" className="rounded-full">
-                    <Link href={`/lobby/${id}`}><ArrowRight size={"1.2rem"}/></Link>
+                    <Link href={`/lobby/${lobby_id}`}><ArrowRight size={"1.2rem"}/></Link>
                 </AppButton>
             </div>
         </AppCard>
