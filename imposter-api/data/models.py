@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Optional
 from uuid import UUID, uuid4
@@ -9,7 +9,7 @@ from sqlmodel import Field, Relationship, SQLModel
 class PlayerLobbyLink(SQLModel, table=True):
     account_id:UUID = Field(primary_key=True, default=None, foreign_key="account.account_id")
     lobby_id:UUID = Field(primary_key=True, default=None, foreign_key="lobby.lobby_id")
-    joined_at:datetime = Field()
+    joined_at:datetime = Field(default_factory=lambda:datetime.now(tz=UTC))
 
 class AdminAccount(SQLModel, table=True):
     admin_id:Optional[UUID] = Field(primary_key=True, default=None)

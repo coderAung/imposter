@@ -25,7 +25,7 @@ class SignUpService(BaseService):
                               created_at=datetime.now())
             save_and_refresh(self.session, account)
             password = AccountPassword(account_id=account.account_id, password=hash_password(form.password), updated_at=datetime.now())
-            save_and_refresh(self.session, password)
+            save_and_refresh(self.session, password, commit=True)
         return ModificationResult[UUID](account.account_id)
 
 class SignInService(BaseService):

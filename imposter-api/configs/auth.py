@@ -39,7 +39,7 @@ def get_login_user(token:Annotated[str, Depends(oauth2_scheme)], session:Annotat
         if role == "admin":
             admin = safecall(session.exec(select(AdminAccount).where(AdminAccount.admin_email == email)).first(), "AdminAccount", "email", email)
             login_user = LoginUser(userid=str(admin.admin_id), username=admin.admin_email, password=admin.admin_password, role=role)
-        request.user = login_user
+        request.state.user = login_user
         return login_user
     except AppBusinessException:
         raise HTTPException(

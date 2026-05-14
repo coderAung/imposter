@@ -14,7 +14,8 @@ def safecall[T](t:T | None, model:str, key:str, value:str) -> T:
         raise AppBusinessException(f"{model} with {key} : {value} is not found.")
     return t
 
-def save_and_refresh[T:SQLModel](session:Session, t:T):
+def save_and_refresh[T:SQLModel](session:Session, t:T, commit:bool=False):
     session.add(t)
-    session.flush()
+    if commit: session.commit()
+    else: session.flush()
     session.refresh(t)
