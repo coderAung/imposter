@@ -36,7 +36,7 @@ class SignInService(BaseService):
             password = safecall(self.session.get(AccountPassword, account.account_id), "AccountPassword", "id", account.account_id)
             if not verify_password(form.password, password.password):
                 raise AppBusinessException("Wrong password.")
-        return jwt_encode({"account_id": account.account_id, "email":account.email, "role": "player"})
+        return jwt_encode({"account_id": str(account.account_id), "email":account.email, "role": "player"})
 
 
 class GoogleSignInService:

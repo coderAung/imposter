@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from sqlmodel import SQLModel
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from data.database import engine
 
@@ -29,6 +30,12 @@ async def lifespan(app:FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(controllers.controller)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 controllers.exception_handers(app)
 

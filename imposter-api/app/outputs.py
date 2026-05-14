@@ -2,6 +2,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
+from sqlmodel import func, select, distinct
+from sqlalchemy.orm import aliased
+
+from data.models import Account, Follower, PlayerLobbyLink
+
 
 @dataclass
 class Profile:
@@ -10,7 +15,23 @@ class Profile:
     name:str
     email:str
     profile_photo:str
-    lobbies:int;games:int;followers:int;followings:int
+    lobbies:int;followers:int;followings:int
+
+    @staticmethod
+    def select():
+        Followers = aliased(Follower)
+        Followings = aliased(Follower)
+        statement = (select(
+            func.count(distinct(PlayerLobbyLink.lobby_id)).label("lobbies"),
+            func.count(distinct(Followers.account_id)).label("followers"),
+            func.count(distinct(Followings.follower_id)).label("followings"))
+        .select_from(Account)
+        .outerjoin(PlayerLobbyLink, PlayerLobbyLink.account_id == Account.account_id)
+        .outerjoin(Followers, Followers.account_id == Account.account_id)
+        .outerjoin(Followings, Followings.follower_id == Account.account_id)
+        .group_by(Account.account_id))
+        return statement
+
 
 @dataclass
 class LobbyListItem:
@@ -53,7 +74,6 @@ class GameDisplay:
 @dataclass
 class VoteResult(PlayerProfile):
     votes:int
-    
 
 @dataclass
 class GameResult:
