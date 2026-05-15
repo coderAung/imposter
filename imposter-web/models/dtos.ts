@@ -31,3 +31,7 @@ export type LobbyDeail = {
         profile:string,
     }[]
 }
+
+export type ModificationResult = {
+    result_id: string,
+}
