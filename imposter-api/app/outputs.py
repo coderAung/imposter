@@ -92,3 +92,7 @@ class CategoryListItem:
 @dataclass
 class ModificationResult[ID]:
     result_id:ID
+
+@dataclass
+class ProfileListItem(PlayerProfile):
+    email:str
