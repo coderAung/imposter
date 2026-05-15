@@ -6,7 +6,7 @@ import { Title } from "@/components/customs/fonts"
 import { AppInput } from "@/components/customs/forms"
 import { LobbyListItem } from "@/models/dtos"
 import { LobbyForm } from "@/models/schemas"
-import { useCurrentLobby } from "@/utils/hooks"
+import { useCurrentLobby, useLobbies } from "@/utils/hooks"
 import { ArrowRight, Edit, Minus, Plus, SquareArrowRightExit, Trash2, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -15,9 +15,11 @@ import {create as createLobby} from "@/services/actions/lobby.action"
 
 export const LobbyList = ({lobbies}: {lobbies:LobbyListItem[]}) => {
     const setCurrentLobby = useCurrentLobby(state => state.setCurrentLobby)
+    const setLobbies = useLobbies(state => state.setLobbies)
     useEffect(() => {
         setCurrentLobby(null)
-    }, [setCurrentLobby])
+        setLobbies(lobbies)
+    }, [setCurrentLobby, setLobbies, lobbies])
     const [open, setOpen] = useState(false)
     const toggle = () => setOpen(!open)
     return (
@@ -105,7 +107,7 @@ export const LobbyFormModal = ({open = false, close}: {open:boolean, close?:() =
                 <div onClick={e => e.stopPropagation()} className="rounded-2xl p-3 pb-5 backdrop-blur-xl border-2 border-green-500 bg-green-500/10">
                     <div className="mb-3 flex justify-between items-center">
                         <Title title="New Lobby"/>
-                        <AppButton variant="ghost" onClick={close}><X /></AppButton>
+                        <AppButton color="green" className="rounded-full" variant="ghost" onClick={close}><X /></AppButton>
                     </div>
                     <hr className="text-green-400" />
                     <form onSubmit={handleSubmit} className="mt-5 px-5">
@@ -123,7 +125,7 @@ export const GameFormModal = ({open = false, close}: {open:boolean, close?:() =>
     const lobbyId = useCurrentLobby(state => state.lobbyId)
 
     return (
-        <div onClick={close} className={`w-full h-full fixed top-0 p-5 justify-center backdrop-blur-lg ${open ? "flex" : "hidden"}`}>
+        <div onClick={close} className={`fixed inset-0 p-5 justify-center backdrop-blur-lg ${open ? "flex" : "hidden"}`}>
             <div className="py-20 w-[95%] md:w-1/3">
                 <div onClick={e => e.stopPropagation()} className="rounded-2xl p-3 pb-5 backdrop-blur-xl border-2 border-green-500 bg-green-500/10">
                     <div className="mb-3 flex justify-between items-center">
@@ -156,12 +158,13 @@ const LobbyInput = ({className, lobbyId, lobbyName}:{className?:string, lobbyId:
 }
 
 const LobbySelect = ({className}:{className?:string}) => {
+    const lobbies = useLobbies(state => state.lobbies)
     return (
         <div className={` ${className}`}>
             <label htmlFor="">Select Lobby</label>
             <div className="border-2 border-green-500 mt-2 rounded p-2">
                 <select className="w-full outline-0 ring-0">
-                    {["WeAreWe", "Friends", "CSBranch", "Bellas"].map((v, i) => <option className="text-green-200 bg-green-800" key={i}>{v}</option>)}
+                    {lobbies.map((i) => <option value={i.lobby_id} className="text-green-200 bg-green-800" key={i.lobby_id}>{i.name}</option>)}
                 </select>
             </div>
         </div>

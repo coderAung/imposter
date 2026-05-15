@@ -35,3 +35,11 @@ export type LobbyDeail = {
 export type ModificationResult = {
     result_id: string,
 }
+
+export type ProfileListItem = {
+    name:string
+    email:string,
+    username:string,
+    account_id:string,
+    profile_photo?:string,
+}

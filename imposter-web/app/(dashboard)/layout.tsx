@@ -5,9 +5,12 @@ import { Bell, Gamepad2, Home, Menu, Search, Settings, UserRound, UsersRoundIcon
 import Link from "next/link";
 import { GameFormModal } from "./_parts/lobbies";
 import { useState } from "react";
+import { AppButton } from "@/components/customs/buttons";
+import { useMobile } from "@/utils/use-mobile";
+import { SearchAccountModal } from "./_parts/searches";
 
 export default function DashboardLayout({children}: {children:React.ReactNode}) {
-
+    const isMobile = useMobile()
     const [open, setOpen] = useState(false)
     const toggle = () => setOpen(!open)
 
@@ -15,8 +18,8 @@ export default function DashboardLayout({children}: {children:React.ReactNode}) 
         <>
             <div className="md:w-1/2 backdrop-blur-xl px-2 py-2 md:mx-auto md:mt-2 md:rounded items-center flex justify-between mb-4 sticky top-0">
                 <Header header="Imposter"/>
-                <div className="flex gap-x-4 px-3">
-                    <Search />
+                <div className="flex gap-x-4 items-center px-3">
+                    <AppButton onClick={toggle} variant="ghost" className="rounded-full text-white"><Search /></AppButton>
                     <Bell />
                     <div className="hidden md:flex">
                         <Menu />
@@ -27,16 +30,18 @@ export default function DashboardLayout({children}: {children:React.ReactNode}) 
             <div className="pb-20 md:w-1/2 md:mx-auto md:p-0">
                 {children}
             </div>
-            <StickyMenu toggle={toggle} />
-            <GameFormModal open={open} close={toggle} />
+            <SearchAccountModal open={open} close={toggle} />
+            {isMobile && <StickyMenu />}
         </>
     )
 }
 
-const StickyMenu = ({toggle}:{toggle?:() => void}) => {
+const StickyMenu = () => {
+    const [open, setOpen] = useState(false)
+    const toggle = () => setOpen(!open)
 
     return (
-        <div className="fixed bottom-2 w-full px-3 md:hidden">
+        <div className="fixed bottom-2 w-full px-3">
             <div className="rounded-2xl bg-blue-300/20 px-2 py-5 backdrop-blur-xl">
                 <div className="grid grid-cols-5 gap-y-2">
                     <StickyMenuItem asChild><Link href={"/home"}><Home /></Link></StickyMenuItem>
@@ -50,6 +55,7 @@ const StickyMenu = ({toggle}:{toggle?:() => void}) => {
                     <StickyMenuItem><UserRound /></StickyMenuItem>
                 </div>
             </div>
+            <GameFormModal open={open} close={toggle} />
         </div>
     )
 }
