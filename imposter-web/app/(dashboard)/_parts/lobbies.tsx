@@ -48,11 +48,11 @@ export const LobbyCard = ({lobby_id, name, players}: LobbyListItem) => {
     )
 }
 
-export const ProfileCard = () => {
+export const ProfileCard = ({id, name, profile_photo}: {id:string, name:string, profile_photo?:string}) => {
     return (
         <AppCard className="rounded-2xl flex flex-col items-center justify-center">
             <Image src="/default.avif" alt="Profile Photo" width={100} height={100} className="rounded-full" />
-            <span className="text-sm mt-3">Ye Wont Aung</span>
+            <span className="text-sm mt-3">{name}</span>
         </AppCard>
     )
 }

@@ -1,19 +1,14 @@
-"use client"
 import { AppButton } from "@/components/customs/buttons";
 import { Title } from "@/components/customs/fonts";
 import { Copy, Plus, UserPlus } from "lucide-react";
 import { GameForm, LeaveButton, ProfileCard } from "../../_parts/lobbies";
 import { AppCard } from "@/components/customs/cards";
-import { useCurrentLobby } from "@/utils/hooks";
-import { use, useEffect } from "react";
+import *  as lobbyService from "@/services/lobby-service"
 import { ChatControls, MicButton, SpeakerButton } from "@/app/_parts/chats";
 
-export default function Lobby({ params }: { params: Promise<{ id: string }> }) {
-    const setCurrentLobby = useCurrentLobby(state => state.setCurrentLobby)
-    const { id } = use(params)
-    useEffect(() => {
-        setCurrentLobby(("389350"))
-    }, [id, setCurrentLobby])
+export default async function Lobby({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+    const lobby = await lobbyService.findById(id)
     return (
         <>
             <div className="relative flex justify-between px-2">
@@ -25,9 +20,9 @@ export default function Lobby({ params }: { params: Promise<{ id: string }> }) {
                 </div>
 
                 <div>
-                    <Title title="Lobby - WeFriends" />
+                    <Title title={`Lobby - ${lobby.name}`} />
                     <div className="text-sm">
-                        <span>ID - </span><span>874501481</span><AppButton variant="ghost"><Copy size={"1rem"} /></AppButton>
+                        <span>ID - </span><span>{lobby.lobby_id}</span><AppButton className="inline" variant="ghost"><Copy size={"1rem"} /></AppButton>
                     </div>
                 </div>
                 <div className="hidden md:block">
@@ -38,7 +33,7 @@ export default function Lobby({ params }: { params: Promise<{ id: string }> }) {
             <GameForm className="hidden md:block px-2 mt-5" />
 
             <div className="grid grid-cols-3 gap-5 mt-5 md:pb-24">
-                {[1, 2, 3, 4, 5].map(i => <ProfileCard key={i} />)}
+                {lobby.players.map(i => <ProfileCard id={i.player_id} name={i.name} key={i.player_id} />)}
                 <AppButton variant="ghost" className="hidden md:flex" asChild>
                     <AppCard className="flex flex-col items-center rounded-2xl justify-center" variant="purple">
                         <Plus />

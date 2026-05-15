@@ -1,3 +1,4 @@
+"use client"
 import { Mic, MicOff, Volume2, VolumeOff } from "lucide-react"
 import { useState } from "react"
 

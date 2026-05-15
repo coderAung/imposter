@@ -19,3 +19,15 @@ export type LobbyListItem = {
     name:string,
     players:number,
 }
+
+export type LobbyDeail = {
+    lobby_id:string,
+    name:string,
+    created_at:string,
+    players: {
+        player_id:string,
+        name:string,
+        username:string,
+        profile:string,
+    }[]
+}
