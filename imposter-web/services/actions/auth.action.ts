@@ -1,5 +1,5 @@
 "use server"
-import { AuthResult, ModificationResult } from "@/models/dtos";
+import { AuthResult } from "@/models/dtos";
 import { SignInForm, SignUpForm } from "@/models/schemas";
 import { setAccessToken } from "@/utils/auth";
 import { publicRequest } from "@/utils/rest-client";

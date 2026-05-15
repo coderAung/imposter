@@ -3,27 +3,33 @@ import { AppBadge } from "@/components/customs/badges"
 import { AppButton } from "@/components/customs/buttons"
 import { AppCard } from "@/components/customs/cards"
 import { Title } from "@/components/customs/fonts"
+import { AppInput } from "@/components/customs/forms"
 import { LobbyListItem } from "@/models/dtos"
+import { LobbyForm } from "@/models/schemas"
 import { useCurrentLobby } from "@/utils/hooks"
 import { ArrowRight, Edit, Minus, Plus, SquareArrowRightExit, Trash2, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import {create as createLobby} from "@/services/actions/lobby.action"
 
 export const LobbyList = ({lobbies}: {lobbies:LobbyListItem[]}) => {
     const setCurrentLobby = useCurrentLobby(state => state.setCurrentLobby)
     useEffect(() => {
         setCurrentLobby(null)
     }, [setCurrentLobby])
+    const [open, setOpen] = useState(false)
+    const toggle = () => setOpen(!open)
     return (
         <div>
             <div className="mb-3 flex justify-between items-center">
                 <Title title="Lobbies"/>
-                <AppButton variant="ghost" className="flex items-center bg-blue-500/20 text-blue-500"><Plus size={"1.2rem"}/> New Lobby</AppButton>
+                <AppButton onClick={toggle} variant="ghost" className="flex items-center bg-blue-500/20 text-blue-500"><Plus size={"1.2rem"}/> New Lobby</AppButton>
             </div>
             <div className="flex flex-col gap-y-3 py-2">
                 {lobbies.map(i => <LobbyCard key={i.lobby_id} lobby_id={i.lobby_id} name={i.name} players={i.players} />)}
             </div>
+            <LobbyFormModal open={open} close={toggle} />
         </div>
     )
 }
@@ -80,6 +86,38 @@ const StartButton = ({className}: {className?:string}) => {
     return <button className={`self-end cursor-pointer p-2 rounded border-2 bg-green-500/40 border-green-700 ${className}`}>Start</button>
 }
 
+export const LobbyFormModal = ({open = false, close}: {open:boolean, close?:() => void}) => {
+
+    const [form, setForm] = useState<LobbyForm>({name: ""})
+
+    const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setForm({...form, [e.target.name]: e.target.value})
+    }
+
+    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        await createLobby(form)
+    }
+
+    return (
+        <div onClick={close} className={`fixed inset-0 z-50 justify-center backdrop-blur-lg ${open ? "flex" : "hidden"}`}>
+            <div className="py-20 w-[95%] md:w-1/3">
+                <div onClick={e => e.stopPropagation()} className="rounded-2xl p-3 pb-5 backdrop-blur-xl border-2 border-green-500 bg-green-500/10">
+                    <div className="mb-3 flex justify-between items-center">
+                        <Title title="New Lobby"/>
+                        <AppButton variant="ghost" onClick={close}><X /></AppButton>
+                    </div>
+                    <hr className="text-green-400" />
+                    <form onSubmit={handleSubmit} className="mt-5 px-5">
+                        <AppInput value={form.name} name="name" onChange={handleInput} label="Lobby Name" placeholder="Lobby name" className="mb-3"/>
+                        <AppButton variant="primary" color="green" type="submit" className="w-full">Add</AppButton>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export const GameFormModal = ({open = false, close}: {open:boolean, close?:() => void}) => {
 
     const lobbyId = useCurrentLobby(state => state.lobbyId)
@@ -105,7 +143,7 @@ export const GameFormModal = ({open = false, close}: {open:boolean, close?:() =>
     )
 }
 
-const LobbyInput = ({className, lobbyId,lobbyName}:{className?:string, lobbyId:string, lobbyName:string}) => {
+const LobbyInput = ({className, lobbyId, lobbyName}:{className?:string, lobbyId:string, lobbyName:string}) => {
     return (
         <div className={className}>
             <label htmlFor="">Lobby</label>

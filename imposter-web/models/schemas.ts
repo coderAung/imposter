@@ -9,3 +9,7 @@ export type SignUpForm = {
     password:string,
     confirm:string
 }
+
+export type LobbyForm = {
+    name:string,
+}
